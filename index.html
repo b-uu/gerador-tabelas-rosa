@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Sucos Saudáveis</title>
+
+<!-- LIBS PARA EXPORTAR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background-color: white;
+    text-align: center;
+    color: #C2185B;
+    padding: 20px;
+}
+
+h2{
+    margin-bottom: 20px;
+}
+
+.controls{
+    margin-bottom: 15px;
+}
+
+button{
+    background-color: #f4719d;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover{
+    opacity: 0.85;
+}
+
+table{
+    width: 95%;
+    max-width: 1200px;
+    margin: auto;
+    border-collapse: collapse;
+    border: 2px solid #fb4a86;
+}
+
+th, td{
+    border: 1px solid #ffbdd4;
+    padding: 12px;
+}
+
+th{
+    background-color: #ff9fbf;
+    color: #;
+}
+
+tr:nth-child(even){
+    background-color: #FFF5F7;
+}
+
+td{
+    background-color: white;
+}
+
+footer{
+    margin-top: 20px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h2 contenteditable="true">Tabela Editável</h2>
+
+<div class="controls">
+    <button onclick="addRow()">➕ Linha</button>
+    <button onclick="removeRow()">➖ Linha</button>
+    <button onclick="addColumn()">➕ Coluna</button>
+    <button onclick="removeColumn()">➖ Coluna</button>
+    <button onclick="exportPNG()">🖼️ PNG</button>
+    <button onclick="exportPDF()">📄 PDF</button>
+</div>
+
+<div id="tableArea">
+<table id="table">
+    <tr>
+       <th contenteditable="true">Combinação</th>
+       <th contenteditable="true">Origem</th>
+       <th contenteditable="true">Preço</th>
+       <th contenteditable="true">Benefícios</th>
+       <th contenteditable="true">Época</th>
+   </tr>
+    <tr>
+        <td contenteditable="true">Manga com Maracujá</td>
+        <td contenteditable="true">Brasil / Índia</td>
+        <td contenteditable="true">12,00</td>
+        <td contenteditable="true">Vitamina C</td>
+        <td contenteditable="true">Verão</td>
+    </tr>
+</table>
+</div>
+
+<footer>@buu</footer>
+
+<script>
+function addRow(){
+    const table = document.getElementById("table");
+    const row = table.insertRow();
+    for(let i=0;i<table.rows[0].cells.length;i++){
+        const cell = row.insertCell();
+        cell.contentEditable = "true";
+        cell.innerText = "Editar";
+    }
+}
+
+function removeRow(){
+    const table = document.getElementById("table");
+    if(table.rows.length > 2){
+        table.deleteRow(-1);
+    }
+}
+
+function addColumn(){
+    const table = document.getElementById("table");
+    for(let row of table.rows){
+        const cell = row.insertCell();
+        cell.contentEditable = "true";
+        cell.innerText = row.rowIndex === 0 ? "Nova Coluna" : "Editar";
+    }
+}
+
+function removeColumn(){
+    const table = document.getElementById("table");
+    if(table.rows[0].cells.length > 1){
+        for(let row of table.rows){
+            row.deleteCell(-1);
+        }
+    }
+}
+
+function exportPNG(){
+    html2canvas(document.getElementById("tableArea")).then(canvas=>{
+        const link = document.createElement("a");
+        link.download = "tabela.png";
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+}
+
+function exportPDF(){
+    html2canvas(document.getElementById("tableArea")).then(canvas=>{
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jspdf.jsPDF("landscape","mm","a4");
+        pdf.addImage(imgData,"PNG",10,10,277,0);
+        pdf.save("tabela.pdf");
+    });
+}
+</script>
+
+</body>
+</html>
