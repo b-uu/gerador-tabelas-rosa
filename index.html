@@ -127,10 +127,20 @@ function removeRow(){
 
 function addColumn(){
     const table = document.getElementById("table");
-    for(let row of table.rows){
-        const cell = row.insertCell();
-        cell.contentEditable = "true";
-        cell.innerText = row.rowIndex === 0 ? "Nova Coluna" : "Editar";
+
+    for (let i = 0; i < table.rows.length; i++) {
+        if (i === 0) {
+            // Cabeçalho → cria TH
+            const th = document.createElement("th");
+            th.contentEditable = "true";
+            th.innerText = "Nova Coluna";
+            table.rows[i].appendChild(th);
+        } else {
+            // Corpo → cria TD
+            const td = document.createElement("td");
+            td.contentEditable = "true";
+            td.innerText = "Editar";
+            table.rows[i].appendChild(td);
     }
 }
 
